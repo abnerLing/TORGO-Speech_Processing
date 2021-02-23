@@ -25,9 +25,8 @@ lang=$data_dir/lang
 lang_test=$data_dir/lang_test
 
 
-stage=3
-stop_stage=3
-
+stage=1
+stop_stage=1
 
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     echo
