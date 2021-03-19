@@ -81,30 +81,29 @@ fi
 
 
 if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
-	 steps/train_mono.sh --nj $nj --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
-		 $data_dir/train $lang $exp_dir/mono
-	 steps/align_si.sh --nj $nj --cmd "$train_cmd" \
-		 $data_dir/train $lang $exp_dir/mono $exp_dir/mono_ali
-	 steps/train_deltas.sh --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
-		 $Leaves $Gauss $data_dir $lang $exp_dir/mono_ali $exp_dir/tri1
-	 steps/align_si.sh --nj $nj --cmd "$train_cmd" \
-		 $data_dir/train $lang $exp_dir/tri1 $exp_dir/tri1_ali
-	 steps/train_deltas.sh --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
-		 $Leaves $Gauss $data_dir $lang $exp_dir/tri1_ali $exp_dir/tri2
-	 steps/align_si.sh --nj $nj --cmd "$train_cmd" \
-		 $data_dir/train $lang $exp_dir/tri2 $exp_dir/tri2_ali
-	 steps/train_lda_mllt.sh --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
-		 $Leaves $Gauss $data_dir $lang $exp_dir/tri2_ali $exp_dir/tri3
-	 steps/align_si.sh --nj $nj --cmd "$train_cmd" \
-		 $data_dir/train $lang $exp_dir/tri3 $exp_dir/tri3_ali
-	 steps/train_sat.sh --cmd "$train_cmd" \
-		 $Leaves $Gauss $data_dir $lang $exp_dir/tri3_ali $exp_dir/tri4
-	 steps/align_fmllr.sh --nj $nj --cmd "$train_cmd" \
-		 $data_dir/train $lang $exp_dir/tri4 $exp_dir/tri4_ali
-
-
+	steps/train_mono.sh --nj $nj --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
+		$data_dir/train $lang $exp_dir/mono
+        steps/align_si.sh --nj $nj --cmd "$train_cmd" \
+                $data_dir/train $lang $exp_dir/mono $exp_dir/mono_ali
+        steps/train_deltas.sh --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
+                $Leaves $Gauss $data_dir/train $lang $exp_dir/mono_ali $exp_dir/tri1
+        steps/align_si.sh --nj $nj --cmd "$train_cmd" \
+                $data_dir/train $lang $exp_dir/tri1 $exp_dir/tri1_ali
+        steps/train_deltas.sh --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
+                $Leaves $Gauss $data_dir/train $lang $exp_dir/tri1_ali $exp_dir/tri2
+        steps/align_si.sh --nj $nj --cmd "$train_cmd" \
+                $data_dir/train $lang $exp_dir/tri2 $exp_dir/tri2_ali
+        steps/train_lda_mllt.sh --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
+                $Leaves $Gauss $data_dir/train $lang $exp_dir/tri2_ali $exp_dir/tri3
+        steps/align_si.sh --nj $nj --cmd "$train_cmd" \
+                $data_dir/train $lang $exp_dir/tri3 $exp_dir/tri3_ali
+        steps/train_sat.sh --cmd "$train_cmd" \
+                $Leaves $Gauss $data_dir/train $lang $exp_dir/tri3_ali $exp_dir/tri4
+        steps/align_fmllr.sh --nj $nj --cmd "$train_cmd" \
+                $data_dir/train $lang $exp_dir/tri4 $exp_dir/tri4_ali	 
 fi
-   
+
+
 if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then    
     # decode
     utils/mkgraph.sh $lang_test $exp_dir/tri4 $exp_dir/tri4/graph
