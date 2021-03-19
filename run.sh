@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Abner Hernandez (abner@snu.ac.kr) Seoul National University
+
 . ./path.sh || exit 1
 . ./cmd.sh || exit 1
 nj=14
