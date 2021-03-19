@@ -27,8 +27,8 @@ lang=$data_dir/lang
 lang_test=$data_dir/lang_test
 
 
-stage=4
-stop_stage=4
+stage=3
+stop_stage=3
 
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     echo
@@ -82,35 +82,41 @@ fi
 
 if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
 	 steps/train_mono.sh --nj $nj --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
-		 $data_dir/train $lang $exp_dir/train/mono
+		 $data_dir/train $lang $exp_dir/mono
 	 steps/align_si.sh --nj $nj --cmd "$train_cmd" \
-		 $data_dir/train $lang $exp_dir/train/mono $exp_dir/train/mono_ali
+		 $data_dir/train $lang $exp_dir/mono $exp_dir/mono_ali
 	 steps/train_deltas.sh --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
-		 $Leaves $Gauss $data_dir/train $lang $exp_dir/train/mono_ali $exp_dir/train/tri1
+		 $Leaves $Gauss $data_dir $lang $exp_dir/mono_ali $exp_dir/tri1
 	 steps/align_si.sh --nj $nj --cmd "$train_cmd" \
-		 $data_dir/train $lang $exp_dir/train/tri1 $exp_dir/train/tri1_ali
+		 $data_dir/train $lang $exp_dir/tri1 $exp_dir/tri1_ali
 	 steps/train_deltas.sh --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
-		 $Leaves $Gauss $data_dir/train $lang $exp_dir/train/tri1_ali $exp_dir/train/tri2
+		 $Leaves $Gauss $data_dir $lang $exp_dir/tri1_ali $exp_dir/tri2
 	 steps/align_si.sh --nj $nj --cmd "$train_cmd" \
-		 $data_dir/train $lang $exp_dir/train/tri2 $exp_dir/train/tri2_ali
+		 $data_dir/train $lang $exp_dir/tri2 $exp_dir/tri2_ali
 	 steps/train_lda_mllt.sh --cmd "$train_cmd" --cmvn-opts "$cmvn_opts" \
-		 $Leaves $Gauss $data_dir/train $lang $exp_dir/train/tri2_ali $exp_dir/train/tri3
+		 $Leaves $Gauss $data_dir $lang $exp_dir/tri2_ali $exp_dir/tri3
 	 steps/align_si.sh --nj $nj --cmd "$train_cmd" \
-		 $data_dir/train $lang $exp_dir/train/tri3 $exp_dir/train/tri3_ali
+		 $data_dir/train $lang $exp_dir/tri3 $exp_dir/tri3_ali
 	 steps/train_sat.sh --cmd "$train_cmd" \
-		 $Leaves $Gauss $data_dir/train $lang $exp_dir/train/tri3_ali $exp_dir/train/tri4
+		 $Leaves $Gauss $data_dir $lang $exp_dir/tri3_ali $exp_dir/tri4
 	 steps/align_fmllr.sh --nj $nj --cmd "$train_cmd" \
-		 $data_dir/train $lang $exp_dir/train/tri4 $exp_dir/train/tri4_ali
+		 $data_dir/train $lang $exp_dir/tri4 $exp_dir/tri4_ali
 
 
 fi
    
 if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then    
     # decode
-    utils/mkgraph.sh $lang_test $exp_dir/train/tri4 $exp_dir/train/tri4/graph
+    utils/mkgraph.sh $lang_test $exp_dir/tri4 $exp_dir/tri4/graph
     steps/decode_fmllr.sh --config conf/decode.config --nj 1 --cmd "$decode_cmd"  --num-threads $thread_nj --scoring_opts "$scoring_opts" \
-            $exp_dir/train/tri4/graph $data_dir/test $exp_dir/train/tri4/decode_test
-    cat exp/train/tri4/decode_test/scoring_kaldi/best_wer
+            $exp_dir/tri4/graph $data_dir/test $exp_dir/tri4/decode_test
+    cat exp/tri4/decode_test/scoring_kaldi/best_wer
 fi 
 
+if [ ${stage} -le 5 ] && [ ${stop_stage} -ge 5 ]; then
+    echo ""
+    echo "=== Neural Network models ..."
+    echo "--- nnet: Deep Neural Network (dnn)"
+    local/nnet/run_dnn.sh --nj 14
+fi
 
