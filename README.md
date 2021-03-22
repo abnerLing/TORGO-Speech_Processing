@@ -9,6 +9,10 @@
 #### Stage 3: GMM-HMM AM training
 #### Stage 4: Decode and score
 
+&nbsp;
+&nbsp;
+&nbsp;
+
 # Kaldi-based Speaker identification for the TORGO dataset
 - Simple GMM-HMM acoustic model for teaching Kaldi.
 - Simple DNN-HMM acoustic model.
