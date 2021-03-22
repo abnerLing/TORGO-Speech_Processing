@@ -1,6 +1,7 @@
 # Kaldi-based [ASR](https://github.com/abnerLing/torgo-speech_processing/blob/main/asr/run.sh) for the TORGO dataset
 - Simple GMM-HMM acoustic model for teaching Kaldi.
 - Simple DNN-HMM acoustic model.
+- More details [HERE](https://github.com/abnerLing/Kaldi-Speech_Processing/tree/main/speech%20recognition)
 - Language model building scripts come from https://github.com/cristinae/ASRdys script.
 
 ### While you could just excute the run.sh script all at once it's recommended to run by stages to better understand the code and debug any errors.
@@ -15,6 +16,7 @@
 
 # Kaldi-based [Speaker identification](https://github.com/abnerLing/torgo-speech_processing/blob/main/ver/run.sh) for the TORGO dataset
 - Speaker identification using healthy speakers for training and speakers with dysarthria for evaluation.
+- More Details [HERE](https://github.com/abnerLing/Kaldi-Speech_Processing/tree/main/speaker%20recognition)
 
 ### While you could just excute the run.sh script all at once it's recommended to run by stages to better understand the code and debug any errors.
 #### Stage 1:  Acoustic feature extraction and voice activity detection
