@@ -30,7 +30,7 @@ echo "$0 $@"  # Print the command line for logging
 # Config:
 gmm=exp/tri4
 data_fmllr=exp/data-fmllr-tri4
-stage=2 # resume training with --stage=N
+stage=0 # resume training with --stage=N
 nj=10
 cv_spk_percent=8 # one speaker of the 14 in training for CV                                                               # End of config.
 . utils/parse_options.sh
