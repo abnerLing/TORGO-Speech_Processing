@@ -9,22 +9,19 @@ set -e # exit on error
 data=data
 nj=7
 mfccdir=mfcc
-
-
-
-stage=4
+stage=1
 stop_stage=6
 
 
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
 	echo "=== Extract MFCC & Compute VAD ==="
 	for x in train test; do
+		utils/utt2spk_to_spk2utt.pl data/$x/utt2spk > data/$x/spk2utt
 		steps/make_mfcc.sh --cmd "$train_cmd" --nj $nj data/$x exp/make_mfcc/$x $mfccdir
 		sid/compute_vad_decision.sh --nj $nj --cmd "$train_cmd" data/$x exp/make_mfcc/$x $mfccdir
   		utils/fix_data_dir.sh data/$x
 	done
 fi
-
 
 if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
 	echo "== Train UBM =="
@@ -36,7 +33,6 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
 	sid/train_full_ubm.sh --nj $nj --cmd "$train_cmd" data/train \
 		exp/diag_ubm_1024 exp/full_ubm_1024
 fi
-
 
 if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
 	echo "== Train and Extract ivectors =="
