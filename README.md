@@ -9,6 +9,7 @@
 #### Stage 2: Acoustic feature extraction (MFCC)
 #### Stage 3: GMM-HMM AM training
 #### Stage 4: Decode and score
+#### Stage 5: DNN training
 
 &nbsp;
 &nbsp;
